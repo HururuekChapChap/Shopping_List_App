@@ -13,8 +13,17 @@ struct resultModel : Codable{
 }
 
 struct after_liveModel : Codable {
+    let live : [liveModel]
     let after_live : [dataModel]
     let is_continues : Int
+    
+}
+
+struct liveModel : Codable {
+    
+    let count : Int
+    let time : String
+    let data : [ItemModel]
     
 }
 
@@ -22,12 +31,12 @@ struct dataModel : Codable{
     
     let data : [ItemModel]?
     
+    let time : String?
     let month : Int?
     let day : Int?
     let weekday_eng : String?
     let type : String?
-            
-
+    
 }
 
 struct ItemModel : Codable {
@@ -41,8 +50,6 @@ struct ItemModel : Codable {
     let sametime : [LittleItemModel]?
     let image_list : [String]?
 
-    
-    
 }
 
 struct LittleItemModel : Codable {

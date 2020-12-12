@@ -44,7 +44,7 @@ class ApiViewModel {
 
     }
     
-    func getfetchData(input_url : URL?, completeHandler : @escaping (Result<[dataModel],ApiError>) -> ()){
+    func getfetchData(input_url : URL?, completeHandler : @escaping (Result<after_liveModel,ApiError>) -> ()){
         
         guard let url = input_url else {
             completeHandler(.failure(.urlError))
@@ -77,7 +77,7 @@ class ApiViewModel {
                 
                 let items = try JSONDecoder().decode(resultModel.self, from: jsonData)
                 
-                let returnValue = items.result.after_live
+                let returnValue = items.result
                 
                 completeHandler(.success(returnValue))
                 
@@ -103,4 +103,9 @@ class ApiViewModel {
         
     }
     
+    
+    
+ 
+    
 }
+
