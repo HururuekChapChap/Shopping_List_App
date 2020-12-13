@@ -57,9 +57,7 @@ class LaunchViewController: UIViewController {
             
             
         }
-        
-        
-        
+ 
     }
     
     //2일차

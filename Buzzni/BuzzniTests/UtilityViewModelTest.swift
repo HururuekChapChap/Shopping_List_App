@@ -46,11 +46,36 @@ class UtilityViewModelTest: XCTestCase {
         
         ]
         
-        let noDataSectionList : Int? = utilityViewModel.check_noDataSection(itemData: itemData)
+        let noDataSectionList : [Int] = utilityViewModel.check_noDataSection(itemData: itemData)
         
-        XCTAssertEqual(2, noDataSectionList)
+        XCTAssertEqual(1, noDataSectionList.count)
         
     }
+    
+    
+    func test_make_Date2TimeString(){
+        
+        let inputTime : String = "202012131825"
+        let outputTime : String = "18:25"
+        
+        let dateType = utilityViewModel.make_String2Date(inputTime: inputTime)
+        let result = utilityViewModel.make_Date2TimeString(inputDate: dateType)
+        
+        XCTAssertEqual(outputTime, result)
+        
+    }
+    
+    func test_make_removeLastTwoZero(){
+        
+        let inputTime : String = "20201213182500"
+        let outputTime : String = "202012131825"
+        
+        let result = utilityViewModel.make_removeLastTwoZero(inputTime: inputTime)
+        
+        XCTAssertEqual(outputTime, result)
+        
+    }
+    
     
 
 }

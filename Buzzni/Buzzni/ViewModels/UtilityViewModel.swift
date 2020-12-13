@@ -9,26 +9,40 @@ import UIKit
 
 class UtilityViewModel {
     
-    //2일차 section에 들어갈 뷰 생성
+    //2일차 section에 들어갈 뷰 생성 with label
+    //3일차 insideView 생성
     func make_sectionView(viewCenter : CGFloat, inputText : String) -> UIView{
         
         let view = UIView()
-        view.backgroundColor = .orange
+        view.backgroundColor = .clear
+        
+        if inputText == "" {
+            return view
+        }
+        
+        let insideView = UIView()
+        insideView.frame = CGRect(x: viewCenter - 40, y: 5, width: 80, height: 20)
+        insideView.layer.cornerRadius = 10
+        insideView.backgroundColor = .green
         
         let label = UILabel()
-        label.text = inputText
-        label.frame = CGRect(x: viewCenter - 50, y: 5, width: 100, height: 30)
+        label.text = make_Date2HourString(inputDate: make_String2Date(inputTime: inputText))
+        label.frame = CGRect(x: 14, y: 0, width: 55, height: 20)
+        label.font = UIFont.systemFont(ofSize: 15)
+//        label.textColor = .white
         label.sizeToFit()
         
-        view.addSubview(label)
+        insideView.addSubview(label)
+        
+        view.addSubview(insideView)
         
         return view
     }
     
     //2일차 DateInfo인 데이터 찾기
-    func check_noDataSection(itemData : [dataModel]) -> Int?{
+    func check_noDataSection(itemData : [dataModel]) -> [Int]{
         
-        var noDatasection : Int?
+        var noDatasection : [Int] = []
         
         for (index, element) in itemData.enumerated(){
             
@@ -38,7 +52,7 @@ class UtilityViewModel {
             }
             else{
                 print("\(index) , \(element.month!)")
-                noDatasection = index
+                noDatasection.append(index)
             }
             
         }
@@ -70,9 +84,9 @@ class UtilityViewModel {
     }
     
     //2일차 마지막 시간 출력
-    func get_lastTime(itemData : [dataModel]) -> String{
+    func get_lastTime(itemData : [dataModel]) -> String?{
         
-        var lastTime : String = ""
+        var lastTime : String? = nil
         
         itemData.forEach { (item) in
             lastTime = item.time!
@@ -80,6 +94,47 @@ class UtilityViewModel {
         
         return lastTime
         
+    }
+    
+    //3일차 - String 타입을 Date 타입으로
+    func make_String2Date(inputTime : String) -> Date {
+        
+        let inputDateFormatter = DateFormatter()
+        inputDateFormatter.dateFormat = "yyyyMMddHHmm"
+        
+        return inputDateFormatter.date(from: inputTime)!
+    }
+    
+    //3일차 - Date 타입을 String 타입으로
+    func make_Date2HourString(inputDate : Date) -> String {
+        
+        let outputDateFormatter = DateFormatter()
+        outputDateFormatter.dateFormat = "a h'시'"
+        outputDateFormatter.amSymbol = "오전"
+        outputDateFormatter.pmSymbol = "오후"
+        
+        return outputDateFormatter.string(from: inputDate)
+        
+    }
+    
+    //3일차 - Date 형식을 13:43 형태로 만들어주는 함수
+    func make_Date2TimeString(inputDate : Date) -> String {
+        
+        let outputDateFormatter = DateFormatter()
+        outputDateFormatter.dateFormat = "HH:mm"
+        
+        return outputDateFormatter.string(from: inputDate)
+
+    }
+    
+    //3일차 - 20201213182500을 202012131825로 변경
+    func make_removeLastTwoZero(inputTime : String) -> String {
+        
+        var tempTime = inputTime
+        tempTime.removeLast()
+        tempTime.removeLast()
+        
+        return tempTime
     }
     
 }
