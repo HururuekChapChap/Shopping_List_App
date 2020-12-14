@@ -17,8 +17,17 @@ class MainTableViewCell: UITableViewCell {
     @IBOutlet weak var castTimeLabel: UILabel!
     @IBOutlet weak var stuffNameLabel: UILabel!
     @IBOutlet weak var stuffPriceLabel: UILabel!
+    @IBOutlet weak var expandBtn: UIButton!
     
     var selectedBtn : Bool = false
+    
+    //4일차 - 동시간대 Item들
+    //mainViewController에서 받아왔을 때, 반드시 reloadData() 해줘야했다.
+    var sameTimeItems : [LittleItemModel]? {
+        didSet{
+            insideTableView.reloadData()
+        }
+    }
     
     var expandHandler : ((Bool)->())?
     
@@ -51,6 +60,10 @@ class MainTableViewCell: UITableViewCell {
     //1일차 - Cell 확장 통신 버튼
     @IBAction func expandViewBtn(_ sender: UIButton) {
         
+        guard let items = sameTimeItems else {return}
+//        print(items.count)
+        if items.isEmpty {return}
+        
         selectedBtn = !selectedBtn
         expandHandler?(selectedBtn)
         
@@ -80,18 +93,36 @@ extension MainTableViewCell {
         
         shopLabel.text = itemModel.shop
         stuffNameLabel.text = itemModel.name
-        stuffPriceLabel.text = "\(itemModel.price!)"
-        updatePriceLabel(startTime: itemModel.start_datetime!, endTime: itemModel.end_datetime!)
+        stuffPriceLabel.text = itemModel.price!.currencyKR
+        updatePriceLabel(startTime: itemModel.start_datetime, endTime: itemModel.end_datetime)
+        expandBtn.setTitle("같은 시간대 판매 상품 \(itemModel.sametime?.count ?? 0)개", for: .normal)
+        
     }
     
-    func updatePriceLabel(startTime : String , endTime : String){
+    //3일차 - PriceLabel 변경
+    func updatePriceLabel(startTime : DynamicJsonProperty? , endTime : String?){
         
-        let startTime = utilityViewModel.make_removeLastTwoZero(inputTime: startTime)
-        let endTime = utilityViewModel.make_removeLastTwoZero(inputTime: endTime)
+        guard let startTime = startTime , let endTime = endTime else {
+            castTimeLabel.text = "미지정~미지정"
+            return
+        }
         
-        let start =  utilityViewModel.make_Date2TimeString(inputDate: utilityViewModel.make_String2Date(inputTime: startTime))
+        var newStartTime : String
         
-        let end =  utilityViewModel.make_Date2TimeString(inputDate: utilityViewModel.make_String2Date(inputTime: endTime))
+        switch startTime {
+            
+        case .int(let value):
+             newStartTime = utilityViewModel.make_removeLastTwoZero(inputTime: String(value))
+        case .string(let value):
+            newStartTime = utilityViewModel.make_removeLastTwoZero(inputTime: String(value))
+
+        }
+        
+        let newEndTime = utilityViewModel.make_removeLastTwoZero(inputTime: endTime)
+        
+        let start =  utilityViewModel.make_Date2TimeString(inputDate: utilityViewModel.make_String2Date(inputTime: newStartTime))
+        
+        let end =  utilityViewModel.make_Date2TimeString(inputDate: utilityViewModel.make_String2Date(inputTime: newEndTime))
         
         castTimeLabel.text = "\(start)~\(end)"
     }
@@ -129,25 +160,38 @@ extension MainTableViewCell {
 }
 
 extension MainTableViewCell : UITableViewDelegate , UITableViewDataSource {
-
+    
+    //1일차
     func setInsideTableViewDelegate(){
         insideTableView.delegate = self
         insideTableView.dataSource = self
     }
-
+    
+    //4일차 - Cell 갯수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        
+        return sameTimeItems?.count ?? 0
     }
-
+    
+    //4일차 - update Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        guard let littleItems = sameTimeItems else {return UITableViewCell()}
+        
         guard let cell = insideTableView.dequeueReusableCell(withIdentifier: "InsideCell") as? InsideTableViewCell else {return UITableViewCell()}
-        
-        cell.backgroundColor = .red
-        
+    
+        cell.updateCellUI(littleItemModel: littleItems[indexPath.row])
+ 
         return cell
         
     }
+    
+    //4일차
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
+    
+    
 
 
 }

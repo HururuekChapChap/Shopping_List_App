@@ -16,6 +16,7 @@ class LaunchViewController: UIViewController {
     var jsonData : after_liveModel? {
         
         didSet{
+            
             moveMainViewController()
         }
         
@@ -37,8 +38,18 @@ class LaunchViewController: UIViewController {
             case .success(let data):
                 self?.jsonData = data
 //                print(self!.jsonData!.live)
+//                print("======================")
+//                print(self!.jsonData!.after_live)
             case .failure(let error):
                 print(error.rawValue)
+                
+                //4일차 - Error Page 생성
+                DispatchQueue.main.async {
+                    let errView = self?.storyboard?.instantiateViewController(withIdentifier: "erroView")
+                    self?.present(errView!, animated: true, completion: nil)
+                }
+                
+                
             }
             
         }
@@ -52,9 +63,11 @@ class LaunchViewController: UIViewController {
             
             guard let vc = segue.destination as? MainViewController else {return}
             
-            vc.itemData = jsonData?.after_live
-            vc.liveData = jsonData?.live
-            
+                if let liveModels = jsonData{
+                    vc.itemData = liveModels.after_live
+                    vc.liveData = liveModels.live
+                
+            }
             
         }
  
@@ -66,7 +79,7 @@ class LaunchViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             self?.performSegue(withIdentifier: "moveMainViewSegue", sender: nil)
         }
-        
+
     }
     
 

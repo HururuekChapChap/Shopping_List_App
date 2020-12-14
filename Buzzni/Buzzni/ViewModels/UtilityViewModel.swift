@@ -21,15 +21,15 @@ class UtilityViewModel {
         }
         
         let insideView = UIView()
-        insideView.frame = CGRect(x: viewCenter - 40, y: 5, width: 80, height: 20)
+        insideView.frame = CGRect(x: viewCenter - 40, y: 10, width: 80, height: 20)
         insideView.layer.cornerRadius = 10
-        insideView.backgroundColor = .green
-        
+        insideView.backgroundColor = UIColor(red: 0/255, green: 128/255, blue: 128/255, alpha: 1)
+
         let label = UILabel()
         label.text = make_Date2HourString(inputDate: make_String2Date(inputTime: inputText))
         label.frame = CGRect(x: 14, y: 0, width: 55, height: 20)
         label.font = UIFont.systemFont(ofSize: 15)
-//        label.textColor = .white
+        label.textColor = .white
         label.sizeToFit()
         
         insideView.addSubview(label)

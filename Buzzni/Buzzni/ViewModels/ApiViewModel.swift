@@ -90,6 +90,7 @@ class ApiViewModel {
                 
             }
             //3일차 - 가끔씩 typeMismatch 오류가 뜨는데,,, 왜지? ㅠㅠ
+            //4일차 - 찾았음... Live에 "start_datetime": -1" 이 가능했다,,,,
             catch DecodingError.keyNotFound(let key, let context){
                 print("could not find key \(key) in JSON: \(context.debugDescription)")
             }

@@ -8,7 +8,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
-
+    
     @IBOutlet weak var mainTableView: UITableView!
     
     let apiViewModel = ApiViewModel()
@@ -30,7 +30,8 @@ class MainViewController: UIViewController {
         setTableViewDelegate()
         
         //1일차 - 예측되는 셀크기 주지 않을 경우 오류
-        mainTableView.estimatedRowHeight = 190
+        //4일차 - 잠시 틈을 만든다고 StoryBoard를 수정했더니 190에서 오류나서 늘려줬음
+        mainTableView.estimatedRowHeight = 192
         
         //2일차 - View의 중앙
         viewcenter = view.center.x
@@ -38,10 +39,17 @@ class MainViewController: UIViewController {
         //2일차 - 월일이 들어가는 부분 찾기
         noDataSection = utilityViewModel.check_noDataSection(itemData: itemData ?? [])
         
-    
     }
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    @IBAction func liveViewBtn(_ sender: UIButton) {
+        
+        print("LiveView")
+    }
+    
 }
 
 extension MainViewController : UITableViewDelegate, UITableViewDataSource{
@@ -103,8 +111,10 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
         if itemData[indexPath.section].data != nil {
             
             guard let cell = mainTableView.dequeueReusableCell(withIdentifier: "MainCell") as? MainTableViewCell else {return UITableViewCell()}
-                    
+            
+                cell.sameTimeItems = itemData[indexPath.section].data![indexPath.row].sametime
                 cell.updateCellView(itemModel: itemData[indexPath.section].data![indexPath.row])
+            
                 cell.expandHandler = { [weak self] (response) in
            
                        if response {
@@ -127,7 +137,11 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
         //2일차 - 월일에 해당하는 Section일 경우에
         guard let cell = mainTableView.dequeueReusableCell(withIdentifier: "DateInfoCell") as? DateInfoTableViewCell else {return UITableViewCell()}
         
-            cell.contentView.backgroundColor = .black
+        let items = itemData[indexPath.section]
+        
+        let itemTuple : (mon : Int?, day : Int?, weekday : String?) = (items.month , items.day, items.weekday_kor)
+        
+        cell.updateDateInfoLabel(items: itemTuple)
         
         return cell
         
@@ -187,7 +201,7 @@ extension MainViewController : UIScrollViewDelegate {
                 
                 case .success(let jsonData):
 //                    print(jsonData)
-                    self?.noMoreFetch = jsonData.is_continues == -1 ? true : false
+                    self?.noMoreFetch = jsonData.is_continues != 0 ? true : false
                     let newItemData = jsonData.after_live
                     self?.itemData?.append(contentsOf: newItemData)
                     self?.noDataSection = self!.utilityViewModel.check_noDataSection(itemData: self!.itemData!)
@@ -200,6 +214,12 @@ extension MainViewController : UIScrollViewDelegate {
                     
                 case .failure(let error):
                     print(error.rawValue)
+                    //4일차
+                    DispatchQueue.main.async {
+                        let errView = self?.storyboard?.instantiateViewController(withIdentifier: "erroView")
+                        self?.present(errView!, animated: true, completion: nil)
+                    }
+                    
                 }
                 
             }
