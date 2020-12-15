@@ -45,9 +45,19 @@ class MainViewController: UIViewController {
         super.viewWillAppear(animated)
     }
     
+    //4일차 - LiveView 이동 버튼
     @IBAction func liveViewBtn(_ sender: UIButton) {
         
-        print("LiveView")
+        if liveData == nil {return}
+        
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "LiveViewContrller") as? LiveViewController else {return}
+        
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        
+        vc.liveItems = liveData
+        
+        present(vc, animated: true, completion: nil)
     }
     
 }
