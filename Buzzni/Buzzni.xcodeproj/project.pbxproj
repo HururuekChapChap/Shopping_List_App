@@ -145,7 +145,7 @@
 				08597F722583587A004AF6BA /* App */,
 				08597F73258358FB004AF6BA /* MainViews */,
 				086EA4C625889BEA00F2D298 /* LiveViews */,
-				08609AFC25835C7F005C9EBC /* ViewModels */,
+				08609AFC25835C7F005C9EBC /* Utilities */,
 				08609B3D25850E52005C9EBC /* Models */,
 				08597F3F258357F2004AF6BA /* Main.storyboard */,
 				08597F42258357F6004AF6BA /* Assets.xcassets */,
@@ -195,7 +195,7 @@
 			path = MainViews;
 			sourceTree = "<group>";
 		};
-		08609AFC25835C7F005C9EBC /* ViewModels */ = {
+		08609AFC25835C7F005C9EBC /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				08609AFD25835C9B005C9EBC /* ApiViewModel.swift */,
@@ -203,7 +203,7 @@
 				08B4CF00258791A800CF4D35 /* Ex+INT.swift */,
 				08B4CF052587A3C100CF4D35 /* Ex_UIButton.swift */,
 			);
-			path = ViewModels;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		08609B3D25850E52005C9EBC /* Models */ = {

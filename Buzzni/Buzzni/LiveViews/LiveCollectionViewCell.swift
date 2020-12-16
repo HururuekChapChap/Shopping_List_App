@@ -8,23 +8,42 @@
 import UIKit
 import RxSwift
 
+//5일차
 class LiveCollectionViewCell: UICollectionViewCell {
  
     @IBOutlet weak var liveImageView: UIImageView!
-    
     @IBOutlet weak var liveStuffName: UILabel!
+    @IBOutlet weak var liveShopName: UILabel!
+    @IBOutlet weak var livePrice: UILabel!
+    
     let utilityViewModel = UtilityViewModel()
     let apiViewModel = ApiViewModel()
     
     let imageCache = AppDelegate.imageCache
     let disposeBag = DisposeBag()
     
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        liveImageView.layer.borderWidth = 2
+        liveImageView.layer.borderColor = UIColor.black.cgColor
+        
+    }
+    
+    //4일차 - Collection Cell UI update
     func updateLiveImageViewUI(liveItem : ItemModel){
         
         getImageView(ImageList: liveItem.image_list)
         
+        liveStuffName.text = liveItem.name ?? ""
+        liveShopName.text = liveItem.shop ?? ""
+        let priceString = liveItem.price ?? 0
+        livePrice.text = priceString < 10 ? "상담/렌탈" : priceString.currencyKR
+        
     }
     
+    //4일차 - 이미지 생성
     func getImageView(ImageList : [String]?){
         
         if let imageURL = ImageList {

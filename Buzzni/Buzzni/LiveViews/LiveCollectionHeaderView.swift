@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 
+//5일차
 class LiveCollectionHeaderView: UICollectionReusableView {
         
     @IBOutlet weak var liveImageView: UIImageView!
@@ -21,15 +22,18 @@ class LiveCollectionHeaderView: UICollectionReusableView {
     let imageCache = AppDelegate.imageCache
     let disposeBag = DisposeBag()
     
+    //4일차 - Header UI update
     func updateLiveImageViewUI(liveItem : ItemModel){
         
         getImageView(ImageList: liveItem.image_list)
         liveShopName.text = liveItem.shop ?? ""
         liveStuffName.text = liveItem.name ?? ""
-        liveStuffPrice.text = liveItem.price?.currencyKR ?? ""
+        let priceString = liveItem.price ?? 0
+        liveStuffPrice.text = priceString < 10 ? "상담/렌탈" : priceString.currencyKR
         
     }
     
+    //4일차 - 이미지 생성
     func getImageView(ImageList : [String]?){
         
         if let imageURL = ImageList {

@@ -7,6 +7,7 @@
 
 import UIKit
 
+//4일차 - UIButton 커스텀 마이징
 @IBDesignable
 class Ex_UIButton: UIButton {
 

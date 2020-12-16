@@ -7,26 +7,52 @@
 
 import UIKit
 
+//5일차 - 생방송 중인 것들을 Collection View
 class LiveViewController: UIViewController {
 
     @IBOutlet weak var liveCollectionView: UICollectionView!
     @IBOutlet weak var liveView: UIView!
+    @IBOutlet weak var noLiveView: UIView!
+    
+    var noserviceClosure : (()->())?
     
     var liveItems : [liveModel]? {
         didSet{
-            DispatchQueue.main.async { [weak self] in
-                self?.liveCollectionView.reloadData()
+            
+            if liveItems?.isEmpty == true {
+                noserviceClosure = {
+                    UIView.animate(withDuration: 0) {
+                        self.noLiveView.alpha = 1
+                    }
+                }
+            }
+            else{
+                
+                headerViewItem = liveItems![0].data[0]
+                
+                liveItems![0].data.removeFirst()
+                
+                DispatchQueue.main.async { [weak self] in
+                    self?.liveCollectionView.reloadData()
+                }
             }
         }
     }
+    
+    var headerViewItem : ItemModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         setLiveCollectionViewDelegate()
-        
+        liveView.layer.cornerRadius = 15
 //        print(liveItems)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        noserviceClosure?()
     }
     
     @IBAction func closePopView(_ sender: Any) {
@@ -43,7 +69,7 @@ extension LiveViewController : UICollectionViewDelegate , UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if let liveItems  = liveItems {
+        if let liveItems = liveItems , !liveItems.isEmpty {
             
             return liveItems[0].data.count
             
@@ -58,22 +84,27 @@ extension LiveViewController : UICollectionViewDelegate , UICollectionViewDataSo
         
         guard let cell = liveCollectionView.dequeueReusableCell(withReuseIdentifier: "LiveCollectionViewCell", for: indexPath) as? LiveCollectionViewCell else {return UICollectionViewCell()}
         
-        cell.updateLiveImageViewUI(liveItem: liveItems[0].data[indexPath.item])
+        cell.updateLiveImageViewUI(liveItem: liveItems[0].data[indexPath.item] )
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
+        let returnHeaderView = UICollectionReusableView()
+        returnHeaderView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        
         switch kind {
         case UICollectionView.elementKindSectionHeader :
             
-            guard let liveItems = liveItems else {return UICollectionReusableView()}
             
             guard let header = liveCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "LiveCollectionHeaderView", for: indexPath) as? LiveCollectionHeaderView else {return UICollectionReusableView()}
             
-            
-            header.updateLiveImageViewUI(liveItem: liveItems[0].data[0])
+            guard let headerViewItem = headerViewItem else {
+                print("no Header View")
+                return header}
+                
+            header.updateLiveImageViewUI(liveItem: headerViewItem)
             
             return header
         

@@ -30,16 +30,15 @@ class LaunchViewController: UIViewController {
         let beforeTime = utilityViewModel.make_oneHour_before()
         
         print(beforeTime)
-        //2일차
+        
+        //2일차 - Json data Handler
         apiViewModel.getfetchData(input_url: apiViewModel.makeUrl(dateTime: beforeTime)) { [weak self] (result) in
             
             switch result {
             
             case .success(let data):
                 self?.jsonData = data
-//                print(self!.jsonData!.live)
-//                print("======================")
-//                print(self!.jsonData!.after_live)
+
             case .failure(let error):
                 print(error.rawValue)
                 
@@ -56,7 +55,7 @@ class LaunchViewController: UIViewController {
         
     }
     
-    //2일차
+    //2일차 - Main 뷰로 이동
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "moveMainViewSegue"{
@@ -73,7 +72,7 @@ class LaunchViewController: UIViewController {
  
     }
     
-    //2일차
+    //2일차 - Main 뷰로 이동
     func moveMainViewController(){
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in

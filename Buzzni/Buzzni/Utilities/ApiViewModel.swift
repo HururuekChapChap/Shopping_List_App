@@ -125,28 +125,6 @@ class ApiViewModel {
         
     }
     
-    
-    //3일차 - image 가져오는 함수
-    func getUIImage(imageUrl : String , complete : ((UIImage?)->())? ){
-        
-        guard let url = URL(string: imageUrl) else {
-            complete?(nil)
-            return}
-        
-        DispatchQueue.global().async {
-            
-            guard let imageData = try? Data(contentsOf: url) else {
-                complete?(nil)
-                return}
-            
-            let image = UIImage(data: imageData)
-            
-            complete?(image)
-            
-        }
-        
-    }
-    
     //3일차 - image 가져오는 함수 with RxSwift
     func getUIimage(imageUrl : String) -> Observable<UIImage>{
         

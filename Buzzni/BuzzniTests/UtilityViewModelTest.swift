@@ -38,10 +38,10 @@ class UtilityViewModelTest: XCTestCase {
         ]
         
         let itemData : [dataModel] = [
-            dataModel(data: itemModel_single , time: "202012121700", month: nil, day: nil, weekday_eng: nil, type: nil),
-            dataModel(data: itemModel_multi , time: "202012121700", month: nil, day: nil, weekday_eng: nil, type: nil),
-            dataModel(data: nil , time: nil, month: 12, day: 13, weekday_eng: "wen", type: "anyThing"),
-            dataModel(data: itemModel_single , time: "202012121700", month: nil, day: nil, weekday_eng: nil, type: nil)
+            dataModel(data: itemModel_single , time: "202012121700", month: nil, day: nil, weekday_kor: nil, type: nil),
+            dataModel(data: itemModel_multi , time: "202012121700", month: nil, day: nil, weekday_kor: nil, type: nil),
+            dataModel(data: nil , time: nil, month: 12, day: 13, weekday_kor: "wen", type: "anyThing"),
+            dataModel(data: itemModel_single , time: "202012121700", month: nil, day: nil, weekday_kor: nil, type: nil)
             
         
         ]

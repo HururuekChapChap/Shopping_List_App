@@ -7,8 +7,10 @@
 
 import Foundation
 
+//4일차 - 원으로 표시
 extension Int {
     
+    //4일차 - 원으로 형태 변환
     var currencyKR : String {
         
         let numberFormatter = NumberFormatter()

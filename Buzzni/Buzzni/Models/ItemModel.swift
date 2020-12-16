@@ -56,7 +56,7 @@ struct liveModel : Codable {
     
     let count : Int
     let time : String
-    let data : [ItemModel]
+    var data : [ItemModel]
     
 }
 

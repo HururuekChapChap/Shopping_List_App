@@ -91,9 +91,10 @@ extension MainTableViewCell {
             DispatchQueue.main.async {self.mainCellimageView.image = UIImage(named: "Buzzni.png")}
         }
         
-        shopLabel.text = itemModel.shop
-        stuffNameLabel.text = itemModel.name
-        stuffPriceLabel.text = itemModel.price!.currencyKR
+        shopLabel.text = itemModel.shop ?? ""
+        stuffNameLabel.text = itemModel.name ?? ""
+        let priceString = itemModel.price ?? 0
+        stuffPriceLabel.text = priceString < 10 ? "상담/렌탈" : priceString.currencyKR
         updatePriceLabel(startTime: itemModel.start_datetime, endTime: itemModel.end_datetime)
         expandBtn.setTitle("같은 시간대 판매 상품 \(itemModel.sametime?.count ?? 0)개", for: .normal)
         
