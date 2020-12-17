@@ -41,10 +41,6 @@ class MainViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     //4일차 - LiveView 이동 버튼
     @IBAction func liveViewBtn(_ sender: UIButton) {
         
@@ -125,20 +121,22 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource{
                 cell.sameTimeItems = itemData[indexPath.section].data![indexPath.row].sametime
                 cell.updateCellView(itemModel: itemData[indexPath.section].data![indexPath.row])
             
-                cell.expandHandler = { [weak self] (response) in
-           
-                       if response {
-                           self?.selectedCellPath.append(indexPath)
-                       }
-                       else{
-                           self?.selectedCellPath = self!.selectedCellPath.filter({ (index) -> Bool in
-                               return index != indexPath
-                           })
-                       }
-
+            //6일차 - 불필요한 response (true or false) 제거
+                cell.expandHandler = { [weak self] in
+                    
+                    if self!.selectedCellPath.contains(indexPath) {
+                        self?.selectedCellPath = self!.selectedCellPath.filter({ (index) -> Bool in
+                                return index != indexPath
+                        })
+                    }
+                    else{
+                        self?.selectedCellPath.append(indexPath)
+                    }
+                    
+                    
                        self?.mainTableView.reloadRows(at: self!.selectedCellPath, with: .none)
-           
-                   }
+                    
+                }
             
             return cell
             
@@ -197,13 +195,13 @@ extension MainViewController : UIScrollViewDelegate {
             
             // is_continues 상태가 -1 일 경우 fetch 금지
             if noMoreFetch {return}
-            
+            // 마지막 시간대를 가져옴
             let lastDayTime = utilityViewModel.get_lastTime(itemData: itemData ?? [])
-            
+            // 마지막 시간대로 새로운 URL 생성 후 네트워크 작업
             let input_url = apiViewModel.makeUrl(dateTime: lastDayTime)
-            
+            //페이지 네이션 동작 중일 때는 기다림
             if apiViewModel.isPagination {return}
-            
+            //get Data
             apiViewModel.getfetchData(input_url: input_url) { [weak self](result) in
 
                 

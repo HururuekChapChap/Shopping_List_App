@@ -19,7 +19,9 @@ class MainTableViewCell: UITableViewCell {
     @IBOutlet weak var stuffPriceLabel: UILabel!
     @IBOutlet weak var expandBtn: UIButton!
     
-    var selectedBtn : Bool = false
+    //6일차 - Cell 내부에 Stored Property를 할 경우, 알 수 없게
+    //Value가 초기화 되는 현상이 발생했음, 따라서 selectedBtn은 사용하지 않음
+    //var selectedBtn : Bool = false
     
     //4일차 - 동시간대 Item들
     //mainViewController에서 받아왔을 때, 반드시 reloadData() 해줘야했다.
@@ -29,7 +31,7 @@ class MainTableViewCell: UITableViewCell {
         }
     }
     
-    var expandHandler : ((Bool)->())?
+    var expandHandler : (()->())?
     
     let apiViewModel = ApiViewModel()
     let utilityViewModel = UtilityViewModel()
@@ -58,14 +60,14 @@ class MainTableViewCell: UITableViewCell {
     }
     
     //1일차 - Cell 확장 통신 버튼
+    //6일차 - 임의적으로 값이 초기화 되는 selectedBtn을 제거
     @IBAction func expandViewBtn(_ sender: UIButton) {
         
         guard let items = sameTimeItems else {return}
 //        print(items.count)
         if items.isEmpty {return}
         
-        selectedBtn = !selectedBtn
-        expandHandler?(selectedBtn)
+        expandHandler?()
         
     }
     //3일차 - tableView reuse 상태

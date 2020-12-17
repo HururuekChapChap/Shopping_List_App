@@ -43,12 +43,30 @@ class UtilityViewModelTest: XCTestCase {
             dataModel(data: nil , time: nil, month: 12, day: 13, weekday_kor: "wen", type: "anyThing"),
             dataModel(data: itemModel_single , time: "202012121700", month: nil, day: nil, weekday_kor: nil, type: nil)
             
-        
         ]
         
         let noDataSectionList : [Int] = utilityViewModel.check_noDataSection(itemData: itemData)
         
         XCTAssertEqual(1, noDataSectionList.count)
+        
+    }
+    
+    func test_get_lastTime(){
+        
+        let expectedResult : String = "202012122100"
+        
+        let itemData : [dataModel] = [
+            dataModel(data: nil , time: "202012121700", month: nil, day: nil, weekday_kor: nil, type: nil),
+            dataModel(data: nil , time: "202012121900", month: nil, day: nil, weekday_kor: nil, type: nil),
+            dataModel(data: nil , time: "202012122000", month: 12, day: 13, weekday_kor: "wen", type: "anyThing"),
+            dataModel(data: nil , time: "202012122100", month: nil, day: nil, weekday_kor: nil, type: nil)
+            
+        ]
+        
+        let lastTime = utilityViewModel.get_lastTime(itemData: itemData)
+        
+        XCTAssertEqual(expectedResult, lastTime)
+        
         
     }
     
