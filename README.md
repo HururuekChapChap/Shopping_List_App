@@ -13,6 +13,11 @@
 <img src = "https://user-images.githubusercontent.com/57618897/102689757-e3fa3600-4243-11eb-8407-0b0f38395f86.gif"> 
 </p>
 
+# Functions
++ 특정 시간 간격의 Pagination 
++ Rest API로 서버로 부터 데이터 수집
++ 동적인 TableView 구현
+
 # Used Skill
 
 + AutoLayOut with StoryBoard
